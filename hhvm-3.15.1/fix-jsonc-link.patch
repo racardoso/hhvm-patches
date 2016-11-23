@@ -1,0 +1,42 @@
+From b27639a9082d6cfc8cabb0611a5b380ea9686462 Mon Sep 17 00:00:00 2001
+From: Keith Adams <kma@slack-corp.com>
+Date: Tue, 16 Aug 2016 13:11:44 -0700
+Subject: [PATCH] Fix the jsonc link.
+
+Summary:
+cmake -DUSE_JSONC . fails to link without these symbols defined.
+Closes https://github.com/facebook/hhvm/pull/7275
+
+Reviewed By: aorenste
+
+Differential Revision: D3693360
+
+Pulled By: aorenste
+
+fbshipit-source-id: d7a28189c11f7ecb00bcbec6fba0f19dcdbb6797
+---
+ hphp/runtime/ext/json/jsonc_parser.cpp | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/hphp/runtime/ext/json/jsonc_parser.cpp b/hphp/runtime/ext/json/jsonc_parser.cpp
+index c1fe2b3..dc34671 100644
+--- a/hphp/runtime/ext/json/jsonc_parser.cpp
++++ b/hphp/runtime/ext/json/jsonc_parser.cpp
+@@ -261,6 +261,14 @@ bool JSON_parser(Variant &return_value, const char *data, int data_len,
+     return retval;
+ }
+ 
++void json_parser_init() {
++    // Nop
++}
++
++void json_parser_scan(IMarker& imarker) {
++    // No-op for now?
++}
++
+ }
+ 
+ #endif /* HAVE_JSONC */
+-- 
+2.7.4
+

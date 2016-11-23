@@ -1,0 +1,29 @@
+From b98adb90a9e82328370e7b8d4c1a224f2d256b9a Mon Sep 17 00:00:00 2001
+From: Leonardo Bianconi <leonardo.bianconi@eldorado.org.br>
+Date: Tue, 12 Jan 2016 11:55:22 -0200
+Subject: [PATCH] Enabling OCaml for PPC64
+
+Just removing the if added when there was no ocaml for PPC64.
+---
+ CMake/FindOCaml.cmake | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/CMake/FindOCaml.cmake b/CMake/FindOCaml.cmake
+index 1eabb38..e85f5d7 100644
+--- a/CMake/FindOCaml.cmake
++++ b/CMake/FindOCaml.cmake
+@@ -1,11 +1,6 @@
+ set(OCAMLC_FOUND FALSE)
+ set(OCAMLC_OPT_SUFFIX "")
+ 
+-if(IS_PPC64)
+-  # No OCaml port for PPC64 yet, skip it
+-  return()
+-endif()
+-
+ find_program(OCAMLC_EXECUTABLE ocamlc DOC "path to ocamlc")
+ mark_as_advanced(OCAMLC_EXECUTABLE)
+ 
+-- 
+2.7.4
+

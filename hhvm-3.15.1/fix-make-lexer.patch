@@ -1,0 +1,26 @@
+Index: hhvm-3.15.1/hphp/parser/make-lexer.sh
+===================================================================
+--- hhvm-3.15.1.orig/hphp/parser/make-lexer.sh
++++ hhvm-3.15.1/hphp/parser/make-lexer.sh
+@@ -10,7 +10,7 @@ if [ -n "${FBCODE_DIR}" ]; then
+   DIR="${FBCODE_DIR}/hphp/parser"
+ fi
+ 
+-INFILE=hphp.ll
++INFILE=${DIR}/hphp.ll
+ 
+ if [ -z "${INSTALL_DIR}" ]; then
+   INSTALL_DIR="${DIR}"
+Index: hhvm-3.15.1/hphp/parser/make-parser.sh
+===================================================================
+--- hhvm-3.15.1.orig/hphp/parser/make-parser.sh
++++ hhvm-3.15.1/hphp/parser/make-parser.sh
+@@ -10,7 +10,7 @@ if [ -n "${FBCODE_DIR}" ]; then
+   DIR="${FBCODE_DIR}/hphp/parser"
+ fi
+ 
+-INFILE=hphp.y
++INFILE=${DIR}/hphp.y
+ 
+ if [ -z "${INSTALL_DIR}" ]; then
+   INSTALL_DIR="${DIR}"

@@ -1,0 +1,41 @@
+From 8e5e1ad0c368ba741e963f4a24bda53c070bc4f6 Mon Sep 17 00:00:00 2001
+From: Gustavo Serra Scalet <gustavo.scalet@eldorado.org.br>
+Date: Tue, 27 Sep 2016 16:11:11 -0300
+Subject: [PATCH] Fix #115 - Fix GP args to include r10
+
+Somehow only r3-r9 were defined although the ABI points out that r10 is
+also a GP arg. This didn't bring us to problems before as it's rare to
+call a function with so many arguments however the msg_receive function
+is one of them and the garbage was invalid when running hhvm from
+/usr/local/bin/hhvm.
+
+When calling a function with 8 GP args, HHVM was spilling the 8th
+argument to the stack (and keeping 16-bytes alignment, of course) before
+setting all the other register arguments:
+addi    r3,r31,-128
+addi    r27,r27,-8
+stdu    r3,-8(r27)
+
+But msg_receive was reading from r10 even if it was undefined, therefore
+garbage was being used. Now it correctly sets it:
+addi    r10,r31,-128
+---
+ hphp/runtime/vm/jit/abi-ppc64.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/hphp/runtime/vm/jit/abi-ppc64.cpp b/hphp/runtime/vm/jit/abi-ppc64.cpp
+index 2b859ec..400c0ee 100644
+--- a/hphp/runtime/vm/jit/abi-ppc64.cpp
++++ b/hphp/runtime/vm/jit/abi-ppc64.cpp
+@@ -123,7 +123,7 @@ const Abi helper_abi {
+ };
+ 
+ constexpr PhysReg gp_args[] = {
+-  reg::r3, reg::r4, reg::r5, reg::r6, reg::r7, reg::r8, reg::r9
++  reg::r3, reg::r4, reg::r5, reg::r6, reg::r7, reg::r8, reg::r9, reg::r10
+ };
+ 
+ constexpr PhysReg simd_args[] = {
+-- 
+2.7.4
+
